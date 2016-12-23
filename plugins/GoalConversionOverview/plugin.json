@@ -1,0 +1,29 @@
+{
+    "name": "GoalConversionOverview",
+    "description": "Shows a summary of the goal conversion rates",
+    "version": "0.1.0",
+    "theme": false,
+    "require": {
+        "piwik": ">=3.0.0-stable,<4.0.0"
+    },
+    "authors": [
+        {
+            "name": "Piwik",
+            "email": "",
+            "homepage": ""
+        }
+    ],
+    "support": {
+        "email": "",
+        "issues": "",
+        "forum": "",
+        "irc": "",
+        "wiki": "",
+        "source": "",
+        "docs": "",
+        "rss": ""
+    },
+    "homepage": "",
+    "license": "GPL v3+",
+    "keywords": []
+}
