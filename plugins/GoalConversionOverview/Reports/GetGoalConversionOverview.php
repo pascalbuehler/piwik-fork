@@ -25,15 +25,23 @@ class GetGoalConversionOverview extends Base
     {
         parent::init();
 
-        $this->name          = Piwik::translate('GoalConversionOverview_GoalConversionOverview');
+        $this->name          = Piwik::translate('GoalConversionOverview_Title');
+        $this->documentation = Piwik::translate('GoalConversionOverview_Description');
+        $this->subcategoryId = Piwik::translate('GoalConversionOverview_Conversions');
         $this->dimension     = null;
-        $this->documentation = Piwik::translate('Shows a summary of the goal conversion rates');
+
+        $this->order = 11;
+        $this->defaultSortColumn = 'conversion_rate';
+        $this->defaultSortOrderDesc = true;
+
+        $this->metrics       = array('nb_visits', 'nb_conversions', 'conversion_rate');
+        $this->constantRowsCount = true;
 
         // This defines in which order your report appears in the mobile app, in the menu and in the list of widgets
-        $this->order = 11;
+        // $this->order = 10;
 
         // By default standard metrics are defined but you can customize them by defining an array of metric names
-        // $this->metrics       = array('nb_visits', 'nb_hits');
+        // $this->metrics       = array('nb_visits');
 
         // Uncomment the next line if your report does not contain any processed metrics, otherwise default
         // processed metrics will be assigned
@@ -61,15 +69,15 @@ class GetGoalConversionOverview extends Base
      */
     public function configureView(ViewDataTable $view)
     {
-        if (!empty($this->dimension)) {
-            $view->config->addTranslations(array('label' => $this->dimension->getName()));
-        }
+        $view->config->addTranslations(array('label' => Piwik::translate('GoalConversionOverview_Goal')));
+        $view->config->columns_to_display = array_merge(array('label'), $this->metrics);
+        $view->config->show_footer = false;
+
+        $view->requestConfig->filter_sort_column = 'conversion_rate';
 
         // $view->config->show_search = false;
         // $view->requestConfig->filter_sort_column = 'nb_visits';
         // $view->requestConfig->filter_limit = 10';
-
-        $view->config->columns_to_display = array_merge(array('label'), $this->metrics);
     }
 
     /**

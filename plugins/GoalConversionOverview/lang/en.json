@@ -1,5 +1,8 @@
 {
     "GoalConversionOverview": {
-        "GoalConversionOverview": "Goal Conversion Overview"
+        "Title": "Goal Conversion Overview",
+        "Description": "Shows a summary of the goal conversion rates",
+        "Conversions": "Conversions",
+        "Goal": "Goal"
     }
 }

@@ -54,10 +54,12 @@ class API extends \Piwik\Plugin\API
             if($goal['deleted']) {
                 continue;
             }
-            $conversion = $goalsApi->get($idSite, $period, $date, $segment, $goal['idgoal'], ['nb_conversions', 'conversion_rate']);
 
-            $row = $conversion->getFirstRow();
-            $row->addMetadata($row->addMetadata('name', $goal['name']));
+            $conversionData = $goalsApi->get($idSite, $period, $date, $segment, $goal['idgoal'], ['nb_visits', 'nb_conversions', 'conversion_rate']);
+
+            $row = $conversionData->getFirstRow();
+            $row->addColumn('label', $goal['name']);
+
             $table->addRow($row);
         }
 
@@ -74,7 +76,7 @@ class API extends \Piwik\Plugin\API
         $data = [];
 
         // Site
-        $site =  new Site($idSite);
+        $site = new Site($idSite);
         $row->addColumn('siteId', $site->getId());
         $row->addColumn('siteName', $site->getName());
 
