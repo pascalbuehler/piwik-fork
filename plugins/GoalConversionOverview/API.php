@@ -25,7 +25,6 @@ class API extends \Piwik\Plugin\API
 {
 
     /**
-     * Another example method that returns a data table.
      * @param int    $idSite
      * @param string $period
      * @param string $date
@@ -60,10 +59,49 @@ class API extends \Piwik\Plugin\API
             $row = $conversionData->getFirstRow();
             $row->addColumn('label', $goal['name']);
 
+            $row->setNonLoadedSubtableId($goal['idgoal']);
+
             $table->addRow($row);
         }
 
         return $table;
+    }
+
+    /**
+     * @param int    $idSite
+     * @param string $period
+     * @param string $date
+     * @param bool|string $segment
+     * @return DataTable
+     */
+    public function getGoalConversionOverviewSubtable($idSite, $period, $date, $idSubtable, $segment = false)
+    {
+        Piwik::checkUserHasViewAccess($idSite);
+
+        // Init
+        $goalsApi = GoalsAPI::getInstance();
+        $subTable = new DataTable();
+
+        $conversionData = $goalsApi->get($idSite, $period, $date, $segment, $idSubtable, ['nb_visits', 'nb_conversions', 'conversion_rate']);
+        $row = $conversionData->getFirstRow();
+
+        $subTable->addRowsFromSimpleArray([
+            [
+                'label' => Piwik::translate('General_NewVisitor'),
+                'nb_visits' => $row->getColumn('nb_visits_new_visit'),
+                'nb_conversions' => $row->getColumn('nb_conversions_new_visit'),
+                'conversion_rate' => $row->getColumn('conversion_rate_new_visit'),
+            ],
+            [
+                'label' => Piwik::translate('General_ReturningVisitor'),
+                'nb_visits' => $row->getColumn('nb_visits_returning_visit'),
+                'nb_conversions' => $row->getColumn('nb_conversions_returning_visit'),
+                'conversion_rate' => $row->getColumn('conversion_rate_returning_visit'),
+            ],
+        ]);
+
+        return $subTable;
+
     }
 
     public function getGoalConversionOverviewMetadata($idSite, $period, $date, $segment = false)

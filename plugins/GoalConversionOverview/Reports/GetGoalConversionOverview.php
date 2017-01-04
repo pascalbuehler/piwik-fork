@@ -14,11 +14,6 @@ use Piwik\Plugin\ViewDataTable;
 
 use Piwik\View;
 
-/**
- * This class defines a new report.
- *
- * See {@link http://developer.piwik.org/api-reference/Piwik/Plugin/Report} for more information.
- */
 class GetGoalConversionOverview extends Base
 {
     protected function init()
@@ -36,6 +31,8 @@ class GetGoalConversionOverview extends Base
 
         $this->metrics       = array('nb_visits', 'nb_conversions', 'conversion_rate');
         $this->constantRowsCount = true;
+
+        $this->actionToLoadSubTables = 'GetGoalConversionOverviewSubtable';
 
         // This defines in which order your report appears in the mobile app, in the menu and in the list of widgets
         // $this->order = 10;
@@ -71,9 +68,14 @@ class GetGoalConversionOverview extends Base
     {
         $view->config->addTranslations(array('label' => Piwik::translate('GoalConversionOverview_Goal')));
         $view->config->columns_to_display = array_merge(array('label'), $this->metrics);
-        $view->config->show_footer = false;
 
-        $view->requestConfig->filter_sort_column = 'conversion_rate';
+        $view->config->show_search = false;
+        $view->config->show_exclude_low_population = false;
+        $view->config->show_limit_control = false;
+//        $view->config->show_all_views_icons = false;
+        $view->config->show_offset_information = false;
+//        $view->config->show_table = false;
+        $view->config->show_flatten_table = false;
 
         // $view->config->show_search = false;
         // $view->requestConfig->filter_sort_column = 'nb_visits';
