@@ -12,6 +12,9 @@ use Piwik\Piwik;
 use Piwik\Plugin\Report;
 use Piwik\Plugin\ViewDataTable;
 
+use Piwik\Plugins\CoreVisualizations\Visualizations\HtmlTable;
+use Piwik\Plugins\CoreVisualizations\Visualizations\JqplotGraph\Bar;
+use Piwik\Plugins\CoreVisualizations\Visualizations\JqplotGraph\Pie;
 use Piwik\View;
 
 class GetGoalConversionOverview extends Base
@@ -67,15 +70,24 @@ class GetGoalConversionOverview extends Base
     public function configureView(ViewDataTable $view)
     {
         $view->config->addTranslations(array('label' => Piwik::translate('GoalConversionOverview_Goal')));
-        $view->config->columns_to_display = array_merge(array('label'), $this->metrics);
+        switch(get_class($view)) {
+            case HtmlTable::class:
+                $view->config->columns_to_display = array_merge(array('label'), $this->metrics);
+                break;
+            case Bar::class:
+            case Pie::class:
+                $view->config->columns_to_display = array('label', 'conversion_rate');
+                break;
+        }
 
+        $view->config->show_flatten_table = false;
+        $view->config->show_insights = false;
+        $view->config->show_tag_cloud = false;
+        $view->config->show_table_all_columns = false;
         $view->config->show_search = false;
         $view->config->show_exclude_low_population = false;
         $view->config->show_limit_control = false;
-//        $view->config->show_all_views_icons = false;
         $view->config->show_offset_information = false;
-//        $view->config->show_table = false;
-        $view->config->show_flatten_table = false;
 
         // $view->config->show_search = false;
         // $view->requestConfig->filter_sort_column = 'nb_visits';
